@@ -28,6 +28,10 @@ class ExpenseRepository @Inject constructor(
         return expenseDao.insertExpense(expense)
     }
 
+    suspend fun insertExpenses(expenses: List<Expense>) {
+        expenseDao.insertExpenses(expenses)
+    }
+
     suspend fun updateExpense(expense: Expense) {
         expenseDao.updateExpense(expense)
     }

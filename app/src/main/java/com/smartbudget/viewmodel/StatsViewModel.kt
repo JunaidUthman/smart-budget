@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.smartbudget.data.CategoryTotal
 import com.smartbudget.data.ExpenseRepository
+import com.smartbudget.data.PreferencesManager
 import com.smartbudget.utils.DateUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -17,7 +18,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class StatsViewModel @Inject constructor(
-    private val expenseRepository: ExpenseRepository
+    private val expenseRepository: ExpenseRepository,
+    val preferencesManager: PreferencesManager
 ) : ViewModel() {
 
     private val calendar = Calendar.getInstance()

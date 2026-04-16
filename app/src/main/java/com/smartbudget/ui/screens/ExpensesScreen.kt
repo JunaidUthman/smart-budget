@@ -35,6 +35,7 @@ fun ExpensesScreen(viewModel: ExpenseListViewModel) {
     val categories by viewModel.activeCategories.collectAsState()
     val currentMonth by viewModel.currentMonth.collectAsState()
     val currentYear by viewModel.currentYear.collectAsState()
+    val currencyCode by viewModel.preferencesManager.currency.collectAsState()
 
     val monthNames = listOf("Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre")
 
@@ -95,7 +96,11 @@ fun ExpensesScreen(viewModel: ExpenseListViewModel) {
                 )
                 Spacer(modifier = Modifier.height(12.dp))
                 val formatter = NumberFormat.getCurrencyInstance()
-                formatter.currency = Currency.getInstance("MAD")
+                try {
+                    formatter.currency = Currency.getInstance(currencyCode)
+                } catch(e: Exception) {
+                    formatter.currency = Currency.getInstance("MAD")
+                }
                 Text(
                     text = formatter.format(totalAmount ?: 0.0),
                     style = MaterialTheme.typography.headlineLarge,
@@ -133,6 +138,7 @@ fun ExpensesScreen(viewModel: ExpenseListViewModel) {
                         categoryTotal = categoryTotal,
                         categoryExpenses = categoryExpenses,
                         isExpanded = isExpanded,
+                        currencyCode = currencyCode,
                         onDeleteExpense = { viewModel.deleteExpense(it) },
                         onToggle = {
                             expandedCategories = if (isExpanded) {
@@ -154,11 +160,16 @@ fun CategoryAccordionItem(
     categoryTotal: Double,
     categoryExpenses: List<Expense>,
     isExpanded: Boolean,
+    currencyCode: String,
     onDeleteExpense: (Expense) -> Unit,
     onToggle: () -> Unit
 ) {
     val formatter = NumberFormat.getCurrencyInstance()
-    formatter.currency = Currency.getInstance("MAD")
+    try {
+        formatter.currency = Currency.getInstance(currencyCode)
+    } catch(e: Exception) {
+        formatter.currency = Currency.getInstance("MAD")
+    }
 
     Card(
         modifier = Modifier
@@ -228,7 +239,7 @@ fun CategoryAccordionItem(
                         )
                     } else {
                         categoryExpenses.forEach { expense ->
-                            ExpenseSubItem(expense = expense, onDelete = { onDeleteExpense(expense) })
+                            ExpenseSubItem(expense = expense, currencyCode = currencyCode, onDelete = { onDeleteExpense(expense) })
                             Spacer(modifier = Modifier.height(8.dp))
                         }
                     }
@@ -239,9 +250,13 @@ fun CategoryAccordionItem(
 }
 
 @Composable
-fun ExpenseSubItem(expense: Expense, onDelete: () -> Unit) {
+fun ExpenseSubItem(expense: Expense, currencyCode: String, onDelete: () -> Unit) {
     val formatter = NumberFormat.getCurrencyInstance()
-    formatter.currency = Currency.getInstance("MAD")
+    try {
+        formatter.currency = Currency.getInstance(currencyCode)
+    } catch(e: Exception) {
+        formatter.currency = Currency.getInstance("MAD")
+    }
     val dateFormat = SimpleDateFormat("dd MMM", Locale("fr", "FR"))
 
     Row(

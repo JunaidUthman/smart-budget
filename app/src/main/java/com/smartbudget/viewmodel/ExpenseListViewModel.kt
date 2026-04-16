@@ -7,6 +7,7 @@ import com.smartbudget.data.CategoryRepository
 import com.smartbudget.data.Expense
 import com.smartbudget.data.ExpenseRepository
 import com.smartbudget.utils.DateUtils
+import com.smartbudget.data.PreferencesManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,7 +22,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ExpenseListViewModel @Inject constructor(
     private val expenseRepository: ExpenseRepository,
-    private val categoryRepository: CategoryRepository
+    private val categoryRepository: CategoryRepository,
+    val preferencesManager: PreferencesManager
 ) : ViewModel() {
 
     private val calendar = Calendar.getInstance()

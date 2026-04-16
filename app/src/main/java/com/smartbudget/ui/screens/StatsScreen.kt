@@ -30,6 +30,7 @@ fun StatsScreen(viewModel: StatsViewModel) {
     val totalAmount by viewModel.totalAmount.collectAsState()
     val currentMonth by viewModel.currentMonth.collectAsState()
     val currentYear by viewModel.currentYear.collectAsState()
+    val currencyCode by viewModel.preferencesManager.currency.collectAsState()
 
     val monthNames = listOf("Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre")
 
@@ -86,7 +87,11 @@ fun StatsScreen(viewModel: StatsViewModel) {
                     } else 0.0
 
                     val formatter = NumberFormat.getCurrencyInstance()
-                    formatter.currency = Currency.getInstance("MAD")
+                    try {
+                        formatter.currency = Currency.getInstance(currencyCode)
+                    } catch(e: Exception) {
+                        formatter.currency = Currency.getInstance("MAD")
+                    }
 
                     Card(
                         modifier = Modifier
